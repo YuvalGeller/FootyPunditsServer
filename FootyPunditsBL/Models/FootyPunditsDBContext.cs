@@ -128,9 +128,7 @@ namespace FootyPunditsBL.Models
                 entity.HasIndex(e => e.Username, "account_username_unique")
                     .IsUnique();
 
-                entity.Property(e => e.AccountId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("AccountID");
+                entity.Property(e => e.AccountId).HasColumnName("AccountID");
 
                 entity.Property(e => e.AccName)
                     .IsRequired()
@@ -146,7 +144,9 @@ namespace FootyPunditsBL.Models
 
                 entity.Property(e => e.RankId).HasColumnName("RankID");
 
-                entity.Property(e => e.SignUpDate).HasColumnType("date");
+                entity.Property(e => e.SignUpDate)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Upass)
                     .IsRequired()

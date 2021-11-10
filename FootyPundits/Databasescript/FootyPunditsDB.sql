@@ -1,10 +1,14 @@
+--use master
+--drop database FootyPunditsDB
+--go
+
 CREATE DATABASE FootyPunditsDB;
 GO
 USE FootyPunditsDB;
 GO
 
 CREATE TABLE UserAccount(
-    AccountID INT NOT NULL,
+    AccountID INT identity(1,1) NOT NULL,
     AccName NVARCHAR(255) NOT NULL,
     Email NVARCHAR(255) NOT NULL,
     Username NVARCHAR(255) NOT NULL,
@@ -12,7 +16,7 @@ CREATE TABLE UserAccount(
     ProfilePicture NVARCHAR(255) NOT NULL,
     IsAdmin BIT NOT NULL,
     FavoriteTeam INT NOT NULL,
-    SignUpDate DATE NOT NULL,
+    SignUpDate DATE NOT NULL DEFAULT GETDATE(),
     RankID INT NOT NULL
 );
 ALTER TABLE
@@ -74,3 +78,6 @@ ALTER TABLE
     PlayerRating ADD CONSTRAINT playerrating_accountidfkey_foreign FOREIGN KEY(AccountID) REFERENCES UserAccount(AccountID);
 ALTER TABLE
     VotesHistory ADD CONSTRAINT voteshistory_messageid_foreign FOREIGN KEY(MessageID) REFERENCES AccMessage(MessageID);
+
+insert into Ranks values (1, 100, 'Kuku1', 'Kuku1.png')
+insert into UserAccount (AccName, Email, Username, UPass, RankId, ProfilePicture, IsAdmin, FavoriteTeam) VALUES ('yoval', 'yoval@yuval.com', 'yuval', '1234', 1, '1.jpg', 1, 1)

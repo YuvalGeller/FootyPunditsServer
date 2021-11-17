@@ -46,10 +46,10 @@ namespace FootyPundits.Controllers
         }
 
         [Route("Login")]
-        [HttpGet]
-        public UserAccount Login([FromQuery] string email, [FromQuery] string pass)
+        [HttpPost]
+        public UserAccount Login(UserAccount u)
         {
-            UserAccount user = context.Login(email, pass);
+            UserAccount user = context.Login(u.Email, u.Upass);
 
             //Check user name and password
             if (user != null)
@@ -70,29 +70,6 @@ namespace FootyPundits.Controllers
         }
 
 
-        //[Route("Login")]
-        //[HttpGet]
-        //public UserAccount Login([FromQuery] string email, [FromQuery] string Upass)
-        //{
-        //    UserAccount user = context.Login(email, Upass);
-
-        //    //Check user name and password
-        //    if (user != null)
-        //    {
-        //        HttpContext.Session.SetObject("theUser", user);
-
-        //        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-
-        //        //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-        //        return user;
-        //    }
-        //    else
-        //    {
-
-        //        Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-        //        return null;
-        //    }
-        //}
-
+       
     }
 }

@@ -45,6 +45,49 @@ namespace FootyPundits.Controllers
             }
         }
 
+
+        [Route("signup")]
+        [HttpPost]
+        public UserAccount SignUp([FromBody] UserAccount sentAccount)
+        {
+            UserAccount current = HttpContext.Session.GetObject<UserAccount>("theUser");
+            // Check if user isn't logged in!
+            if (current == null)
+            {                           
+                try
+                {
+                    bool exists = context.UsernameExists(sentAccount.Username) || context.EmailExists(sentAccount.Email);
+                    if (!exists)
+                    {
+                        UserAccount a = context.SignUp(sentAccount);
+                        if (a != null)
+                        {
+                            HttpContext.Session.SetObject("theUser", a);
+
+                            Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                            return a;
+                        }
+                        else
+                        {
+                            Response.StatusCode = (int)System.Net.HttpStatusCode.Conflict;
+                            return null;
+                        }
+
+                    }
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.Conflict;
+                }
+                catch
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                }
+            }
+            else
+                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+
+            return null;
+        }
+
+
         [Route("Login")]
         [HttpPost]
         public UserAccount Login(UserAccount u)

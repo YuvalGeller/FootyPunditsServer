@@ -112,7 +112,40 @@ namespace FootyPundits.Controllers
             }
         }
 
+        [Route("email-exists")]
+        [HttpGet]
+        public bool? EmailExists([FromQuery] string email)
+        {
+            try
+            {
+                bool exists = context.EmailExists(email);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return exists;
+            }
+            catch
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return null;
+            }
+        }
 
-       
+        [Route("username-exists")]
+        [HttpGet]
+        public bool? UsernameExists([FromQuery] string username)
+        {
+            try
+            {
+                bool exists = context.UsernameExists(username);
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return exists;
+            }
+            catch
+            {
+                Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                return null;
+            }
+        }
+
+
     }
 }

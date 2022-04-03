@@ -38,5 +38,18 @@ namespace FootyPunditsBL.Models
 
             return user;
         }
+
+        public bool UpdateUserPfp(string path, int id)
+        {
+            UserAccount account = this.UserAccounts.FirstOrDefault(a => a.AccountId == id);
+            if (account != null)
+            {
+                account.ProfilePicture = path;
+                this.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

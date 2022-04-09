@@ -18,7 +18,7 @@ namespace FootyPunditsBL.Models
 
                 return a;
             }
-            catch
+            catch(Exception e)
             {
                 return null;
             }

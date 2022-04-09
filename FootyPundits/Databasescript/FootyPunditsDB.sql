@@ -79,5 +79,6 @@ ALTER TABLE
 ALTER TABLE
     VotesHistory ADD CONSTRAINT voteshistory_messageid_foreign FOREIGN KEY(MessageID) REFERENCES AccMessage(MessageID);
 
-insert into Ranks values (1, 100, 'Kuku1', 'Kuku1.png')
+
+insert into Ranks values (0, 100, 'Kuku1', 'Kuku1.png')
 insert into UserAccount (AccName, Email, Username, UPass, RankId, ProfilePicture, IsAdmin, FavoriteTeam) VALUES ('yoval', 'yoval@yuval.com', 'yuval', '1234', 1, '1.jpg', 1, 1)

@@ -156,7 +156,7 @@ namespace FootyPundits.Controllers
         [HttpGet]
         public IActionResult LogOut()
         {
-            UserAccount user = HttpContext.Session.GetObject<UserAccount>("user");
+            UserAccount user = HttpContext.Session.GetObject<UserAccount>("theUser");
             if (user != null)
             {
                 HttpContext.Session.Clear();
@@ -172,7 +172,7 @@ namespace FootyPundits.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadImage(IFormFile file)
         {
-            UserAccount user = HttpContext.Session.GetObject<UserAccount>("user");
+            UserAccount user = HttpContext.Session.GetObject<UserAccount>("theUser");
 
             if (user != null)
             {

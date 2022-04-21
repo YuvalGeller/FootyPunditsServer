@@ -204,5 +204,27 @@ namespace FootyPundits.Controllers
         }
 
 
+        [Route("update-profile")]
+        [HttpGet]
+        public IActionResult UpdateProfile([FromQuery] string username, [FromQuery] string password)
+        {
+            UserAccount loggedInAccount = HttpContext.Session.GetObject<UserAccount>("theUser");
+
+            if (loggedInAccount != null)
+            {
+                UserAccount account = context.UserAccounts.FirstOrDefault(a => a.AccountId == loggedInAccount.AccountId);
+                if (account == null) return Forbid();
+                if (username != null) account.Username = username;
+                if (password.Length >= 8) account.Upass = password;
+                context.SaveChanges();
+
+                return Ok();
+            }
+
+            return Forbid();
+        }
+
+
+
     }
 }

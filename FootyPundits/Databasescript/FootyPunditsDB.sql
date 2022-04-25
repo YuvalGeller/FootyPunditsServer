@@ -1,4 +1,4 @@
---use master
+--use masterrrr
 --drop database FootyPunditsDB
 --go
 

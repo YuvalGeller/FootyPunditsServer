@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using FootyPunditsBL.Models;
+using FootyPundits.Hubs;
 
 namespace FootyPundits
 {
@@ -33,12 +34,12 @@ namespace FootyPundits
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
             //Add Controllers and set the Json Serializer to handle loop referencing
             services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions
                         .ReferenceHandler = ReferenceHandler.Preserve);
             //The following two commands set the Session state to work!
             services.AddDistributedMemoryCache();
+            services.AddSignalR();
 
             services.AddSession(options =>
             {
@@ -72,6 +73,7 @@ namespace FootyPundits
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
     }

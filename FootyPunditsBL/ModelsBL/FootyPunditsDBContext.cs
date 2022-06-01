@@ -27,6 +27,8 @@ namespace FootyPunditsBL.Models
         // returns true if username exists otherwise returns false
         public bool UsernameExists(string username) => this.UserAccounts.Any(a => a.Username == username);
 
+        public UserAccount GetAccountByID(int id) => this.UserAccounts.FirstOrDefault(a => a.AccountId == id);
+
         // returns true if email exists otherwise returns false
         public bool EmailExists(string email) => this.UserAccounts.Any(a => a.Email == email);
 
@@ -50,6 +52,21 @@ namespace FootyPunditsBL.Models
             }
 
             return false;
+        }
+
+        public AccMessage AddMsg(AccMessage m)
+        {
+            try
+            {
+                this.AccMessages.Add(m);
+                this.SaveChanges();
+                return m;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
         }
     }
 }

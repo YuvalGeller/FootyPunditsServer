@@ -68,5 +68,61 @@ namespace FootyPunditsBL.Models
                 return null;
             }
         }
+
+        public List<AccMessage> GetMessagesByGameId(int id)
+        {
+            try
+            {
+                List<AccMessage> messages = this.AccMessages.Where(m => m.ChatGameId == id).ToList();
+                foreach (AccMessage message in messages)
+                {
+                    message.Account = this.GetAccountByID(message.AccountId);
+                }
+                return messages;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public VotesHistory LikeMessage(int messageId, int accountId)
+        {
+            try
+            {
+                VotesHistory vh = new VotesHistory()
+                {
+                    AccountIdfkey = accountId,
+                    VotedDate = DateTime.Now,
+                    VoteType = 0,
+                    MessageId = messageId,
+                    IsUpvote = true
+                };
+                this.VotesHistories.Add(vh);
+                this.SaveChanges();
+                return vh;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public VotesHistory UnlikeMessage(int voteId)
+        {
+            try
+            {
+                VotesHistory vh = this.VotesHistories.FirstOrDefault(v => v.VoteId == voteId);
+                if (vh == null)
+                    return null;
+                this.VotesHistories.Remove(vh);
+                this.SaveChanges();
+                return vh;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
     }
 }

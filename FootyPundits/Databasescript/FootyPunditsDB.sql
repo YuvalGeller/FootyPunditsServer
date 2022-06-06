@@ -1,4 +1,4 @@
-    --use masterrrr
+    --use master
     --drop database FootyPunditsDB
     --go
 
@@ -13,7 +13,7 @@
         Email NVARCHAR(255) NOT NULL,
         Username NVARCHAR(255) NOT NULL,
         UPass NVARCHAR(255) NOT NULL,
-        ProfilePicture NVARCHAR(255) NOT NULL,
+        ProfilePicture NVARCHAR(255) NOT NULL DEFAULT 'default_pfp.jpg',
         IsAdmin BIT NOT NULL,
         FavoriteTeam INT NOT NULL,
         SignUpDate DATE NOT NULL DEFAULT GETDATE(),
@@ -77,6 +77,6 @@
 
 
     insert into Ranks values (0, 100, 'Kuku1', 'Kuku1.png')
-    insert into UserAccount (AccName, Email, Username, UPass, RankId, ProfilePicture, IsAdmin, FavoriteTeam) VALUES ('yoval', 'yoval@yuval.com', 'yuval', '1234', 0, '1.jpg', 1, 1)
+    insert into UserAccount (AccName, Email, Username, UPass, RankId, IsAdmin, FavoriteTeam) VALUES ('yoval', 'yoval@yuval.com', 'yuval', '1234', 0, 1, 1)
 
     

@@ -263,6 +263,107 @@ namespace FootyPundits.Controllers
             return null;
         }
 
+        [Route("get-messages")]
+        [HttpGet]
+        public string GetMessages([FromQuery] int id)
+        {
+            UserAccount loggedInAccount = HttpContext.Session.GetObject<UserAccount>("theUser");
 
+            if (loggedInAccount != null)
+            {
+                try
+                {
+                    List<AccMessage> m = context.GetMessagesByGameId(id);
+
+                    if (m != null)
+                    {
+                        JsonSerializerSettings options = new JsonSerializerSettings
+                        {
+                            PreserveReferencesHandling = PreserveReferencesHandling.All
+                        };
+
+                        string json = JsonConvert.SerializeObject(m, options);
+
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return json;
+                    }
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+                catch
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+            }
+
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return null;
+        }
+
+        [Route("like-message")]
+        [HttpGet]
+        public VotesHistory LikeMessage([FromQuery] int messageId)
+        {
+            UserAccount loggedInAccount = HttpContext.Session.GetObject<UserAccount>("theUser");
+
+            if (loggedInAccount != null)
+            {
+                try
+                {
+                    VotesHistory b = context.LikeMessage(messageId, loggedInAccount.AccountId);
+
+                    if (b != null)
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return b;
+                    }
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+                catch
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+            }
+
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return null;
+        }
+
+        [Route("unlike-message")]
+        [HttpGet]
+        public VotesHistory UnlikeMessage([FromQuery] int voteId)
+        {
+            UserAccount loggedInAccount = HttpContext.Session.GetObject<UserAccount>("theUser");
+
+            if (loggedInAccount != null)
+            {
+                try
+                {
+                    VotesHistory b = context.UnlikeMessage(voteId);
+
+                    if (b != null)
+                    {
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return b;
+                    }
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+                catch
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+            }
+
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return false;
+        }
     }
 }

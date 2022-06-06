@@ -32,7 +32,6 @@ namespace FootyPunditsBL.Models
         // returns true if email exists otherwise returns false
         public bool EmailExists(string email) => this.UserAccounts.Any(a => a.Email == email);
 
-        //scaffold-dbcontext "Server=localhost\sqlexpress;Database=FootyPunditsDB;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
         public UserAccount Login(string email, string pass)
         {
             UserAccount user = this.UserAccounts
@@ -79,6 +78,23 @@ namespace FootyPunditsBL.Models
                     message.Account = this.GetAccountByID(message.AccountId);
                 }
                 return messages;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public List<VotesHistory> GetUserVoteHistory(int id)
+        {
+            try
+            {
+                List<VotesHistory> votesHistories = this.VotesHistories.Where(v => v.AccountIdfkey == id).ToList();
+                //foreach (AccMessage message in messages)
+                //{
+                //    message.Account = this.GetAccountByID(message.AccountId);
+                //}
+                return votesHistories;
             }
             catch (Exception e)
             {

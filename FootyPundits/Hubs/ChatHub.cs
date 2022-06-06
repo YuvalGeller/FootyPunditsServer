@@ -30,7 +30,7 @@ namespace FootyPundits.Hubs
             if (returnedMsg != null)
             {
                 IClientProxy proxy = Clients.Group(groupId);
-                await proxy.SendAsync("ReceiveMessageFromGroup", message.AccountId, message.Content, groupId);
+                await proxy.SendAsync("ReceiveMessageFromGroup", message.AccountId, message.Content, groupId, returnedMsg.MessageId);
             }
         }
 

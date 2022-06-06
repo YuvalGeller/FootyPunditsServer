@@ -24,16 +24,20 @@ namespace FootyPunditsBL.Models
         [Key]
         [Column("AccountID")]
         public int AccountId { get; set; }
-        
+        [Required]
         [StringLength(255)]
         public string AccName { get; set; }
+        [Required]
         [StringLength(255)]
         public string Email { get; set; }
+        [Required]
         [StringLength(255)]
         public string Username { get; set; }
+        [Required]
         [Column("UPass")]
         [StringLength(255)]
         public string Upass { get; set; }
+        [Required]
         [StringLength(255)]
         public string ProfilePicture { get; set; }
         public bool IsAdmin { get; set; }

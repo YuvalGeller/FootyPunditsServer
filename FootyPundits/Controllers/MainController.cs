@@ -10,6 +10,7 @@ using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
+using FootyPundits.DTO;
 
 
 namespace FootyPundits.Controllers
@@ -92,22 +93,26 @@ namespace FootyPundits.Controllers
             return null;
         }
 
-
-        [Route("Login")]
-        [HttpPost]
-        public UserAccount Login(UserAccount u)
+        [Route("login")]
+        [HttpGet]
+        public string Login([FromQuery] string email, [FromQuery] string password)
         {
-            UserAccount user = context.Login(u.Email, u.Upass);
+            UserAccount user = context.Login(email, password);
 
             //Check user name and password
             if (user != null)
             {
                 HttpContext.Session.SetObject("theUser", user);
 
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                JsonSerializerSettings options = new JsonSerializerSettings
+                {
+                    PreserveReferencesHandling = PreserveReferencesHandling.All
+                };
 
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return user;
+                string json = JsonConvert.SerializeObject(user, options);
+
+                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                return json;
             }
             else
             {
@@ -302,6 +307,45 @@ namespace FootyPundits.Controllers
             return null;
         }
 
+        [Route("get-vote-history")]
+        [HttpGet]
+        public string GetUserVoteHistory([FromQuery] int id)
+        {
+            UserAccount loggedInAccount = HttpContext.Session.GetObject<UserAccount>("theUser");
+
+            if (loggedInAccount != null)
+            {
+                try
+                {
+                    List<VotesHistory> v = context.GetUserVoteHistory(id);
+
+                    if (v != null)
+                    {
+                        JsonSerializerSettings options = new JsonSerializerSettings
+                        {
+                            PreserveReferencesHandling = PreserveReferencesHandling.All
+                        };
+
+                        string json = JsonConvert.SerializeObject(v, options);
+
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return json;
+                    }
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+                catch
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+            }
+
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return null;
+        }
+
         [Route("like-message")]
         [HttpGet]
         public VotesHistory LikeMessage([FromQuery] int messageId)
@@ -363,7 +407,7 @@ namespace FootyPundits.Controllers
             }
 
             Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-            return false;
+            return null;
         }
     }
 }

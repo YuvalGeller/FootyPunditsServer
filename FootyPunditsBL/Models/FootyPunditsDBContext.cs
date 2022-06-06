@@ -72,6 +72,8 @@ namespace FootyPunditsBL.Models
                 entity.HasKey(e => e.AccountId)
                     .HasName("account_accountid_primary");
 
+                entity.Property(e => e.ProfilePicture).HasDefaultValueSql("('default_pfp.jpg')");
+
                 entity.Property(e => e.SignUpDate).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Rank)
@@ -85,8 +87,6 @@ namespace FootyPunditsBL.Models
             {
                 entity.HasKey(e => e.VoteId)
                     .HasName("voteshistory_voteid_primary");
-
-                entity.Property(e => e.VoteId).ValueGeneratedNever();
 
                 entity.HasOne(d => d.AccountIdfkeyNavigation)
                     .WithMany(p => p.VotesHistories)

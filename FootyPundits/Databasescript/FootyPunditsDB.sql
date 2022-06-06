@@ -47,7 +47,7 @@
     ALTER TABLE
         AccMessage ADD CONSTRAINT accmessage_messageid_primary PRIMARY KEY(MessageID);
     CREATE TABLE VotesHistory(
-        VoteID INT NOT NULL,
+        VoteID INT identity(1,1) NOT NULL,
         AccountIDFKEY INT NOT NULL,
         VotedDate DATE NOT NULL,
         VoteType INT NOT NULL,

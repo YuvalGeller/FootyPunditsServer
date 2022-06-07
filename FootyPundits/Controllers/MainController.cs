@@ -380,7 +380,7 @@ namespace FootyPundits.Controllers
 
         [Route("unlike-message")]
         [HttpGet]
-        public VotesHistory UnlikeMessage([FromQuery] int voteId)
+        public VotesHistory UnlikeMessage([FromQuery] int messageId)
         {
             UserAccount loggedInAccount = HttpContext.Session.GetObject<UserAccount>("theUser");
 
@@ -388,7 +388,7 @@ namespace FootyPundits.Controllers
             {
                 try
                 {
-                    VotesHistory b = context.UnlikeMessage(voteId);
+                    VotesHistory b = context.UnlikeMessage(messageId, loggedInAccount.AccountId);
 
                     if (b != null)
                     {

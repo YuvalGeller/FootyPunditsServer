@@ -124,11 +124,11 @@ namespace FootyPunditsBL.Models
             }
         }
 
-        public VotesHistory UnlikeMessage(int voteId)
+        public VotesHistory UnlikeMessage(int messageId, int accountId)
         {
             try
             {
-                VotesHistory vh = this.VotesHistories.FirstOrDefault(v => v.VoteId == voteId);
+                VotesHistory vh = this.VotesHistories.FirstOrDefault(v => v.MessageId == messageId && v.AccountIdfkey == accountId);
                 if (vh == null)
                     return null;
                 this.VotesHistories.Remove(vh);

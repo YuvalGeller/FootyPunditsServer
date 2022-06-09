@@ -115,6 +115,9 @@ namespace FootyPunditsBL.Models
                     IsUpvote = true
                 };
                 this.VotesHistories.Add(vh);
+                AccMessage message = this.AccMessages.FirstOrDefault(m => m.MessageId == vh.MessageId);
+                if (message != null)
+                    message.Upvotes++;
                 this.SaveChanges();
                 return vh;
             }
@@ -132,6 +135,9 @@ namespace FootyPunditsBL.Models
                 if (vh == null)
                     return null;
                 this.VotesHistories.Remove(vh);
+                AccMessage message = this.AccMessages.FirstOrDefault(m => m.MessageId == messageId);
+                if (message != null)
+                    message.Upvotes--;
                 this.SaveChanges();
                 return vh;
             }
@@ -139,6 +145,33 @@ namespace FootyPunditsBL.Models
             {
                 return null;
             }
+        }
+
+        public Dictionary<int, int> GetLeaderboard()
+        {
+            List<AccMessage> messages = this.AccMessages.ToList();
+            Dictionary<int, int> keyValuePairs = new Dictionary<int, int>();
+
+            foreach (AccMessage message in messages)
+            {
+                try
+                {
+                    keyValuePairs[message.AccountId] += message.Upvotes;
+                }
+                catch
+                {
+                    keyValuePairs[message.AccountId] = message.Upvotes;
+                }
+            }
+
+            Dictionary<int, int> accounts = new Dictionary<int, int>();
+            var a = (from entry in keyValuePairs orderby entry.Value descending select entry).Take(20);
+            foreach (KeyValuePair<int, int> result in a)
+            {
+                accounts[result.Key] = result.Value;
+            }
+
+            return accounts;
         }
     }
 }

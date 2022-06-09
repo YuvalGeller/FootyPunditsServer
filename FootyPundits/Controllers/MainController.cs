@@ -28,29 +28,6 @@ namespace FootyPundits.Controllers
         }
         #endregion
 
-        [Route("Test")]
-        [HttpGet]
-        public UserAccount Test([FromQuery] int id)
-        {
-            UserAccount user = context.UserAccounts.Where(a => a.AccountId == id).FirstOrDefault();
-
-            //Check user name and password
-            if (user != null)
-            {
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-
-                //Important! Due to the Lazy Loading, the user will be returned with all of its contects!!
-                return user;
-            }
-            else
-            {
-
-                Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
-                return null;
-            }
-        }
-
 
         [Route("signup")]
         [HttpPost]
@@ -394,6 +371,45 @@ namespace FootyPundits.Controllers
                     {
                         Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
                         return b;
+                    }
+
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+                catch
+                {
+                    Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    return null;
+                }
+            }
+
+            Response.StatusCode = (int)System.Net.HttpStatusCode.Forbidden;
+            return null;
+        }
+
+        [Route("get-leaderboard")]
+        [HttpGet]
+        public string GetLeaderboard()
+        {
+            UserAccount loggedInAccount = HttpContext.Session.GetObject<UserAccount>("theUser");
+
+            if (loggedInAccount != null)
+            {
+                try
+                {
+                    Dictionary<int, int> l = context.GetLeaderboard();
+
+                    if (l != null)
+                    {
+                        JsonSerializerSettings options = new JsonSerializerSettings
+                        {
+                            PreserveReferencesHandling = PreserveReferencesHandling.All
+                        };
+
+                        string json = JsonConvert.SerializeObject(l, options);
+
+                        Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
+                        return json;
                     }
 
                     Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
